@@ -28,51 +28,6 @@ A real-time collaborative code editor where multiple users can join a shared roo
 **Code Execution**
 - Piston API (free, no key required)
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js v18+
-- npm
-
-### Installation
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/realtime-coder.git
-cd realtime-coder
-```
-
-2. Install backend dependencies
-
-```bash
-npm install
-```
-
-3. Install frontend dependencies
-
-```bash
-cd frontend
-npm install
-```
-
-### Running the App
-
-Start the backend from the root directory:
-
-```bash
-npm run dev
-```
-
-Start the frontend:
-
-```bash
-cd frontend
-npm run dev
-```
-
-Open `http://localhost:5173` in your browser.
 
 ## Usage
 
