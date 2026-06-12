@@ -35,8 +35,7 @@ A real-time collaborative code editor where multiple users can join a shared roo
 2. Share the Room ID with others so they can join the same session
 3. Write code in the editor — changes sync live across all users
 4. Select a language from the dropdown — language syncs for everyone
-5. Add stdin input if your program needs it
-6. Click **▶ Run** to execute the code and see output
+
 
 ## Project Structure
 
