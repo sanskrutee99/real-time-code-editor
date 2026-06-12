@@ -25,8 +25,6 @@ A real-time collaborative code editor where multiple users can join a shared roo
 - Express
 - Socket.IO
 
-**Code Execution**
-- Piston API (free, no key required)
 
 
 ## Usage
