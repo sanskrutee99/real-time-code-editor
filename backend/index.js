@@ -114,7 +114,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const port = process.env.PORT || 3000;
+const port = 3000; // Fixed port to match Dockerfile EXPOSE 3000
 
 const __dirname = path.resolve();
 
@@ -125,5 +125,5 @@ app.get("*", (req, res) => {
   });
 
 server.listen(port, () => {
-  console.log("server is working on port 3000");
+  console.log(`server is working on port ${port}`);
 });
