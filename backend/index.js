@@ -2,10 +2,12 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import path from "path";
+import cors from "cors";
 import { runCode } from "./runner.js";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.post("/api/run", async (req, res) => {
@@ -118,7 +120,7 @@ const __dirname = path.resolve();
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-app.get("/{*path}", (req, res) => {  
+app.get("*", (req, res) => {  
     res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
   });
 
