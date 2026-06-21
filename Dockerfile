@@ -21,6 +21,9 @@ RUN npm install && cd frontend && npm install
 # Copy all project source code
 COPY . .
 
+# Precompile the stdc++.h header to make C++ compilation fast inside the container
+RUN g++ -O2 -I/usr/src/app/backend/include /usr/src/app/backend/include/bits/stdc++.h -o /usr/src/app/backend/include/bits/stdc++.h.gch
+
 # Build the React frontend production assets
 RUN npm run build
 
