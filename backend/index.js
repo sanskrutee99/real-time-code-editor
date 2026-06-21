@@ -2,8 +2,24 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import path from "path";
+import { runCode } from "./runner.js";
 
 const app = express();
+
+app.use(express.json());
+
+app.post("/api/run", async (req, res) => {
+  const { language, code, stdin } = req.body;
+  if (!language || code === undefined) {
+    return res.status(400).json({ error: "Language and code are required fields." });
+  }
+  try {
+    const result = await runCode(language, code, stdin);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 const server = http.createServer(app);
 
@@ -15,6 +31,7 @@ const io = new Server(server, {
 
 const rooms = new Map();
 const roomCodes = new Map();
+const roomLanguages = new Map();
 
 io.on("connection", (socket) => {
   console.log("User Connected", socket.id);
@@ -43,11 +60,26 @@ io.on("connection", (socket) => {
     if (roomCodes.has(roomId)) {
         socket.emit("codeUpdate", roomCodes.get(roomId));
       }
+    if (roomLanguages.has(roomId)) {
+        socket.emit("languageUpdate", roomLanguages.get(roomId));
+      }
   });
 
   socket.on("codeChange", ({ roomId, code }) => {
     roomCodes.set(roomId, code); 
     socket.to(roomId).emit("codeUpdate", code);
+  });
+
+  socket.on("inputChange", ({ roomId, input }) => {
+    socket.to(roomId).emit("inputUpdate", input);
+  });
+
+  socket.on("runStart", ({ roomId }) => {
+    socket.to(roomId).emit("runStarted");
+  });
+
+  socket.on("runEnd", ({ roomId, output }) => {
+    socket.to(roomId).emit("runEnded", output);
   });
 
   socket.on("leaveRoom", () => {
@@ -67,6 +99,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("languageChange", ({ roomId, language }) => {
+    roomLanguages.set(roomId, language);
     io.to(roomId).emit("languageUpdate", language);
   });
 
