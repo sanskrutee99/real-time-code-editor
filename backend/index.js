@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import path from "path";
 import cors from "cors";
+import { exec } from "child_process";
 import { runCode } from "./runner.js";
 
 const app = express();
@@ -21,6 +22,34 @@ app.post("/api/run", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+app.get("/api/diag", async (req, res) => {
+  const diag = {};
+  diag.cwd = process.cwd();
+  diag.envPath = process.env.PATH;
+
+  const runCommand = (cmd) => {
+    return new Promise((resolve) => {
+      exec(cmd, (error, stdout, stderr) => {
+        resolve({
+          success: !error,
+          stdout: stdout.trim(),
+          stderr: stderr.trim(),
+          error: error ? error.message : null
+        });
+      });
+    });
+  };
+
+  diag.pythonVersion = await runCommand("python3 --version");
+  diag.nodeVersion = await runCommand("node --version");
+  diag.gppVersion = await runCommand("g++ --version");
+  diag.javaVersion = await runCommand("java -version");
+  diag.testPythonRun = await runCommand("python3 -c \"print('Hello Python')\"");
+  diag.testNodeRun = await runCommand("node -e \"console.log('Hello Node')\"");
+
+  res.json(diag);
 });
 
 const server = http.createServer(app);
