@@ -139,3 +139,25 @@ realtime-coder/
 | `runEnd` | Client → Server | Broadcast execution outputs |
 | `runEnded` | Server → Client | Display output results to all users in the room |
 | `leaveRoom` | Client → Server | Leave the current room session |
+
+---
+
+## Deployment on Render
+
+Because this application executes user code locally, it requires compiler runtimes (Node, Python, C++, Java) to be present on the host server. The easiest and most reliable way to deploy this on [Render](https://render.com) is by using their **Docker Web Service** hosting.
+
+### Step-by-Step Instructions
+
+1. **Sign in to Render**: Log in to the [Render Dashboard](https://dashboard.render.com).
+2. **Create a New Web Service**:
+   - Click **New** (top-right) → Select **Web Service**.
+   - Connect your GitHub repository: `sanskrutee99/real-time-code-editor`.
+3. **Configure Settings**:
+   - **Name**: Choose a name (e.g., `real-time-code-editor`).
+   - **Region**: Choose your preferred region.
+   - **Branch**: `main`.
+   - **Runtime**: Select **Docker** (Render will automatically read the `Dockerfile` in the root directory to compile and run the container).
+4. **Environment Variables**:
+   - Render exposes the container port automatically. If you want to configure a custom port, add `PORT` (e.g., `3000`) under the **Environment Variables** section.
+5. **Deploy**:
+   - Click **Create Web Service**. Render will pull the repository, compile the Docker container (which installs Node, Python, Java, and C++ compilers), and deploy it to a free public `https` URL!
